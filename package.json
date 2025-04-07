@@ -17,8 +17,11 @@
   "license": "ISC",
   "author": "nikeedev",
   "type": "commonjs",
-  "main": "index.js",
+  "main": "test.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node test.js"
+  },
+  "dependencies": {
+    "min-document": "^2.19.0"
   }
 }

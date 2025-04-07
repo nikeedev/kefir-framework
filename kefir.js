@@ -1,22 +1,22 @@
 "use strict";
+const fs = require('node:fs');
+
+let document = require("min-document");
 
 class Kefir {
-    #root = "root";
+    /** @type {Array<Object|string>} */
     ui;
-    set root(id) {
-        this.#root = id;
-        console.log("Root set to: #", this.root);
-    }
 
     /** 
-     * @param {Array<Object>} ui 
+     * @param {Array<Object|string>} ui 
      */
     constructor(ui) {
         this.ui = ui;
     }
 
-    run() {
-        let root = document.getElementById(this.#root);
+    compileTo(fileName) {
+        let root = document.createElement('div');
+        root.id = "root"
 
         this.ui.forEach((elem, i) => {
             if (typeof elem === "string") {
@@ -171,7 +171,19 @@ class Kefir {
                         break;
                 }
             }
-        })
+        });
+
+        // write to file "fileName"
+        
+        let content = document.documentElement.innerHTML;
+
+        fs.writeFile(fileName, content, err => {
+            if (err) {
+                console.error(err);
+            } else {
+                // file written successfully
+            }
+        });
     }
 
 };
@@ -179,4 +191,4 @@ class Kefir {
 
 console.log("%ckefir.js v0.1.0", "font-family:monospace;font-size:20px; padding:10px; border-radius:10px; background-color: white; color: black;");
 
-export { Kefir };
+module.exports = Kefir;
