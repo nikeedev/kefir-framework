@@ -1,0 +1,24 @@
+{
+  "name": "kefir-framework",
+  "version": "0.1.4",
+  "description": "Kefir UI for Framework",
+  "keywords": [
+    "kefir",
+    "framework"
+  ],
+  "homepage": "https://github.com/nikeedev/kefir-framework#readme",
+  "bugs": {
+    "url": "https://github.com/nikeedev/kefir-framework/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nikeedev/kefir-framework.git"
+  },
+  "license": "ISC",
+  "author": "nikeedev",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
