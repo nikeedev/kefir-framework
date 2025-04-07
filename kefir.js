@@ -2,13 +2,14 @@
 const fs = require('node:fs');
 
 let document = require("min-document");
+const serializeNode = require('min-document/serialize'); // Import the serialization function
 
 class Kefir {
-    /** @type {Array<Object|string>} */
+    /** @type {Array<Object>} */
     ui;
 
     /** 
-     * @param {Array<Object|string>} ui 
+     * @param {Array<Object>} ui 
      */
     constructor(ui) {
         this.ui = ui;
@@ -16,7 +17,7 @@ class Kefir {
 
     compileTo(fileName) {
         let root = document.createElement('div');
-        root.id = "root"
+        root.id = "root";
 
         this.ui.forEach((elem, i) => {
             if (typeof elem === "string") {
@@ -27,11 +28,13 @@ class Kefir {
                 }
                 else if (elem.trimStart().startsWith("css:")) {
                     const css = document.createElement("style");
-                    css.innerHTML = elem.split("css:")[1].trim();
+                    // Create a text node instead of using innerHTML
+                    css.appendChild(document.createTextNode(elem.split("css:")[1].trim()));
                     document.head.appendChild(css);
                 } else {
                     const p = document.createElement("p");
-                    p.innerText = elem;
+                    // Create a text node instead of using innerText
+                    p.appendChild(document.createTextNode(elem));
                     root.appendChild(p);
                 }
             } else if (typeof elem === "object") {
@@ -46,7 +49,8 @@ class Kefir {
                             text.id = elem.id;
                         }
                         try {
-                            text.innerText = elem.text;
+                            // Replace innerText with appendChild(createTextNode())
+                            text.appendChild(document.createTextNode(elem.text));
                             if (elem.action !== undefined) {
                                 text.onclick = elem.action;
                             }
@@ -62,9 +66,10 @@ class Kefir {
                             btn.id = elem.id;
                         }
                         try {
-                            btn.innerText = elem.text;
+                            // Replace innerText with appendChild(createTextNode())
+                            btn.appendChild(document.createTextNode(elem.text));
                             if (elem.action !== undefined) {
-                                btn.onclick = elem.action;
+                                btn.setAttribute("onclick", elem.action);
                             }
                         } catch (e) {
                             console.error(e);
@@ -78,7 +83,8 @@ class Kefir {
                             a.id = elem.id;
                         }
                         try {
-                            a.innerText = elem.text;
+                            // Replace innerText with appendChild(createTextNode())
+                            a.appendChild(document.createTextNode(elem.text));
                             a.href = elem.href;
                             a.target = "_blank";
                         } catch (e) {
@@ -95,7 +101,8 @@ class Kefir {
                         try {
                             elem.options.forEach((option) => {
                                 const optionElement = document.createElement("option");
-                                optionElement.innerText = option;
+                                // Replace innerText with appendChild(createTextNode())
+                                optionElement.appendChild(document.createTextNode(option));
                                 select.appendChild(optionElement);
                             });
                             if (elem.action !== undefined) {
@@ -110,7 +117,7 @@ class Kefir {
                     case "image":
                         const img = document.createElement("img");
                         if (elem.id !== undefined && elem.id.trim() !== "") {
-                            input.id = elem.id;
+                            img.id = elem.id;
                         }
                         try {
                             img.src = elem.src;
@@ -173,21 +180,23 @@ class Kefir {
             }
         });
 
-        // write to file "fileName"
+        // Important: Add the root element to the document body
+        document.body.appendChild(root); 
+        let doctype = '<!DOCTYPE html>\n';
+        let content = doctype + serializeNode(document.documentElement);
         
-        let content = document.documentElement.innerHTML;
-
+        // For debugging
+        console.log(content);
         fs.writeFile(fileName, content, err => {
             if (err) {
                 console.error(err);
             } else {
                 // file written successfully
+                console.log(`Successfully wrote to ${fileName}`);
             }
         });
     }
-
-};
-
+}
 
 console.log("%ckefir.js v0.1.0", "font-family:monospace;font-size:20px; padding:10px; border-radius:10px; background-color: white; color: black;");
 

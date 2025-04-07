@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html><head></head><body><div id="root"><p>Hello</p><br /><button id="incr" onclick="(e) =&gt; {
+            let incr = document.getElementById(&quot;incr&quot;);
+            if (incr.getAttribute(&quot;count&quot;) == undefined) incr.setAttribute(&quot;count&quot;, 0);
+
+            incr.setAttribute(&quot;count&quot;, localStorage.getItem(&quot;count&quot;) != null || localStorage.getItem(&quot;count&quot;) != undefined ? localStorage.getItem(&quot;count&quot;) : &quot;0&quot;);
+            
+            incr.setAttribute(&quot;count&quot;, (parseInt(incr.getAttribute(&quot;count&quot;))+1).toString());
+            e.target.innerText = &quot;Increment: &quot; + incr.getAttribute(&quot;count&quot;);
+            localStorage.setItem(&quot;count&quot;, incr.getAttribute(&quot;count&quot;));
+        }">"Increment: " + (localStorage.getItem("count") == null || localStorage.getItem("count") == undefined ? "0" : localStorage.getItem("count").toString())</button><br /><br /><button onclick="(e) =&gt; {
+            let incr = document.getElementById(&quot;incr&quot;);
+            incr.setAttribute(&quot;count&quot;, 0);
+            incr.innerText = &quot;Increment: &quot; + incr.getAttribute(&quot;count&quot;);
+            localStorage.setItem(&quot;count&quot;, incr.getAttribute(&quot;count&quot;));
+        }">Clear</button><hr /></div></body></html>
